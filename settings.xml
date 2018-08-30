@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<settings>
+    <bcp path="bcp"/>
+    <sqlcmd path="sqlcmd"/>
+    <psql path="psql"/>
+    <mysql path="mysql"/>
+</settings>
+
