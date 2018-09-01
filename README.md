@@ -1,4 +1,4 @@
-#Overview of backup_restore
+# Overview of backup_restore
 
 My goal in writing backup_restore is to learn more about database servers
 and to make it simple to transfer data between different servers.
