@@ -78,7 +78,7 @@ from
 
     union
 
-    select 10, t.table_name, 0, CONCAT('<Index name="', c2.relname, '">')
+    select 10, t.table_name, i.indrelid, CONCAT('<Index name="', c2.relname, '">')
     from
         information_schema.tables t
 	inner join
@@ -93,7 +93,7 @@ from
 
     union
 
-    select 11, t.table_name, 0, CONCAT('<Field name="', x.colname, '" pos="0"/>')
+    select 11, t.table_name, i.indrelid, CONCAT('<Field name="', x.colname, '" pos="0"/>')
 --		t.table_name, c.oid::oid oid, c2.relname, x.colname 
     from
         information_schema.tables t
@@ -133,7 +133,7 @@ from
 
     union
 
-    select 12, t.table_name, 0, '</Index>'
+    select 12, t.table_name, i.indrelid, '</Index>'
     from
         information_schema.tables t
 	inner join

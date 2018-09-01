@@ -1,44 +1,20 @@
 #Overview of backup_restore
 
-backup_restore works between supported RDBMS:es (at least in theory :-)
+My goal in writing backup_restore is to learn more about database servers
+and to make it simple to transfer data between different servers.
 
-## Backing up a MySQL and restoring it to PostgreSQL!
+One aspect that I like about backup_restore, is that most of it is written
+in declarative languages (XML/XSLT/SQL) which makes it easy to inspect
+and modify without having to load up a complex development environment.
 
-- . /copydb.sh mysql://root.Pa$$w0rd/f1db psql://postgres.Pa$$w0rd/f1db
+backup_restore will work at least on MSSQL/Sqlite/MySQL/MariaDB/PostgreSQL with possibly more to follow.
 
-### Extract a database definition from a MySQL database:
+## Backing up and restoring between any of MSSQL/Sqlite/MySQL/PostgreSQL
 
-- mysql -u root -p'Pa$$w0rd' -D f1db -N < mysql/exportdefinition.sql > output/f1db.xml
+- Create a configuration file (see samples folder)
 
-### Generate a database creation script for PostgreSQL:
+- xsltproc copydb.xslt configfile.xml > \copydb.cmd
 
-- xsltproc createtables.xslt test.xml > test.psql
+- output\copydb.cmd
 
-### Create an empty destination database in PostgreSQL
-
-- psql -U postgres -p Pa$$w0rd -e "CREATE DATABASE f1db"
-
-### Run the database creation script
-
-- psql -U postgres -p Pass$w0rd -d f1db < test.psql
-
-### Create a shell script that exports the MySQL tables:
-
-- xsltproc --stringparam u root --stringparam p 'Pa$$w0rd' mysql/export.xslt output/employees.xml > output/export.sh
-
-### Run the shell script
-
-- . ./export.sh
-
-### Create a SQL script that imports all tables at once:
-
-- xsltproc psql/import.xslt output/test.xml > output/import.psql
-
-### Perform the import:
-
-- psql -U postgres -d thedb < import.psql
-
-### Apply all contraints
-
-## Congratulations, you have migrated a MySQL database to PostgreSQL!
-
+## Congratulations, you have migrated a database between two RDBMS:es!

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<settings>
+    <copySettings>
+        <source>
+            <provider>mysql</provider>
+            <host>localhost</host>
+            <port>1433</port>
+            <database>f1db</database>
+            <user>root</user>
+            <password>Pa$$w0rd</password>
+        </source>
+        <destination>
+            <provider>sqlite</provider>
+            <database>output/f1db_2.db</database>
+        </destination>
+    </copySettings>
+    <bcp path=""/>
+    <sqlcmd path="sqlcmd"/>
+    <psql path="C:\Program Files\PostgreSQL\10\bin\psql.exe"/>
+    <mysql path="C:\Program Files\MariaDB 10.2\bin\mysql.exe"/>
+    <sqlite path=""/>
+    <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
+</settings>
+
