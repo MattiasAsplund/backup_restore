@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <xsl:param name="shell" select="'cmd'"/>
+    <xsl:param name="shell" select="//settings/@shell"/>
     <xsl:param name="sP" select="//settings/copySettings/source/provider/text()"/>
     <xsl:param name="sD" select="//settings/copySettings/source/database/text()"/>
     <xsl:param name="sI" select="//settings/copySettings/source/integratedSecurity/text()"/>
@@ -11,6 +11,7 @@
     <xsl:param name="dI" select="//settings/copySettings/destination/integratedSecurity/text()"/>
     <xsl:param name="du" select="//settings/copySettings/destination/user/text()"/>
     <xsl:param name="dp" select="//settings/copySettings/destination/password/text()"/>
+    <xsl:param name="bcpPath" select="//settings/bcp/@path"/>
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:if test="$shell='bash'">
@@ -51,11 +52,11 @@ xsltproc --stringparam i <xsl:value-of select="$sI"/> --stringparam u <xsl:value
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="$shell='cmd'">
-xsltproc --stringparam i <xsl:value-of select="$sI"/> --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam d "<xsl:value-of select="$sD"/>" mssql/export.xslt output/<xsl:value-of select="$sD"/>.xml &gt; output/export.sh
-. output/export.sh
+xsltproc --stringparam bcpPath "<xsl:value-of select="$bcpPath"/>" --stringparam i <xsl:value-of select="$sI"/> --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam d "<xsl:value-of select="$sD"/>" mssql/export.xslt output/<xsl:value-of select="$sD"/>.xml &gt; output/export.cmd
+@CALL output\export.cmd
             </xsl:if>
             <xsl:if test="$shell='bash'">
-xsltproc --stringparam i "<xsl:value-of select="$sI"/>" --stringparam u <xsl:value-of select="$su"/> --stringparam p $'<xsl:value-of select="$sp"/>' --stringparam d $'<xsl:value-of select="$sD"/>' mssql/export.xslt output/<xsl:value-of select="$sD"/>.xml &gt; output/export.sh
+xsltproc --stringparam bcpPath "<xsl:value-of select="$bcpPath"/>" --stringparam i "<xsl:value-of select="$sI"/>" --stringparam u <xsl:value-of select="$su"/> --stringparam p $'<xsl:value-of select="$sp"/>' --stringparam d $'<xsl:value-of select="$sD"/>' mssql/export.xslt output/<xsl:value-of select="$sD"/>.xml &gt; output/export.sh
 . output/export.sh
             </xsl:if>
         </xsl:if>

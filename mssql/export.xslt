@@ -4,17 +4,19 @@
     <xsl:param name="i"/>
     <xsl:param name="u"/>
     <xsl:param name="p"/>
+    <xsl:param name="shell" select="'cmd'"/>
+    <xsl:param name="bcpPath"/>
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
         <xsl:choose>
-            <xsl:when test="i='yes'">
-bcp <xsl:value-of select="@name"/> out csvexport/<xsl:value-of select="@name"/>.csv -E -d <xsl:value-of select="$d"/> -c -t "\t"
+            <xsl:when test="$i='yes'">
+&quot;<xsl:value-of select="$bcpPath"/>&quot; <xsl:value-of select="@name"/> out csvexport/<xsl:value-of select="@name"/>.csv -T -d <xsl:value-of select="$d"/> -c -t "\t"
             </xsl:when>
             <xsl:otherwise>
-bcp <xsl:value-of select="@name"/> out csvexport/<xsl:value-of select="@name"/>.csv -U sa -P 'Pa$$w0rd' -d <xsl:value-of select="$d"/> -c -t "\t"
+&quot;<xsl:value-of select="$bcpPath"/>&quot; <xsl:value-of select="@name"/> out csvexport/<xsl:value-of select="@name"/>.csv -U sa -P 'Pa$$w0rd' -d <xsl:value-of select="$d"/> -c -t "\t"
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
