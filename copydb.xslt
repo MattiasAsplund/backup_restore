@@ -14,6 +14,7 @@
     <xsl:param name="dp" select="//settings/copySettings/destination/password/text()"/>
     <xsl:param name="bcpPath" select="//settings/bcp/@path"/>
     <xsl:param name="sqlitePath" select="//settings/sqlite/@path"/>
+    <xsl:variable name="varMysqlPath" select="//settings/mysql/@path"/>
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:if test="$shell='bash'">
@@ -33,13 +34,13 @@ xsltproc --stringparam tempFolder <xsl:value-of select="$tempFolder"/> --stringp
         </xsl:if>
 
         <xsl:if test="$sP='mysql'">
-&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p<xsl:value-of select="$sp"/> -D <xsl:value-of select="$sD"/> -N &lt; mysql/exportdefinition.sql &gt;<xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
+&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p'<xsl:value-of select="$sp"/>' -D <xsl:value-of select="$sD"/> -N &lt; mysql/exportdefinition.sql &gt;<xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
                 <xsl:if test="$shell='bash'">
-xsltproc --stringparam u <xsl:value-of select="$su"/> --stringparam p '<xsl:value-of select="$sp"/>' --stringparam mysqlPath '<xsl:value-of select="//mysql/@path"/>' --stringparam sedPath '<xsl:value-of select="//sed/@path"/>' mysql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sh
+xsltproc --stringparam tempFolder '<xsl:value-of select="$tempFolder"/>' --stringparam u '<xsl:value-of select="$su"/>' --stringparam p '<xsl:value-of select="$sp"/>' --stringparam d '<xsl:value-of select="$sD"/>' --stringparam mysqlPath '<xsl:value-of select="$varMysqlPath"/>' --stringparam sedPath '<xsl:value-of select="//sed/@path"/>' mysql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sh
 . <xsl:value-of select="$tempFolder"/>export.sh
                 </xsl:if>
                 <xsl:if test="$shell='cmd'">
-xsltproc --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam mysqlPath "<xsl:value-of select="//mysql/@path"/>" --stringparam sedPath "<xsl:value-of select="//sed/@path"/>" mysql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.cmd
+xsltproc --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam d '<xsl:value-of select="$sD"/>' --stringparam mysqlPath "<xsl:value-of select="$varMysqlPath"/>" --stringparam sedPath "<xsl:value-of select="//sed/@path"/>" mysql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.cmd
 @CALL <xsl:value-of select="$tempFolder"/>export.cmd
                 </xsl:if>
         </xsl:if>
@@ -118,14 +119,12 @@ sqlcmd -d <xsl:value-of select="$dD"/> -U <xsl:value-of select="$du"/> -P <xsl:v
         </xsl:if>
 
       <xsl:if test="$dP='mysql'">
-                <xsl:if test="$shell='cmd'">
 xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
-&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p<xsl:value-of select="$sp"/><xsl:text> </xsl:text><xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>createtables.sql
-xsltproc mysql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sql
-&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p<xsl:value-of select="$sp"/><xsl:text> </xsl:text><xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>import.sql
+&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p'<xsl:value-of select="$sp"/>' -D <xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>createtables.sql
+xsltproc --stringparam mysqlPath '"<xsl:value-of select="$varMysqlPath"/>"' mysql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
+. output/import.sh
 xsltproc mysql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
-&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p<xsl:value-of select="$sp"/><xsl:text> </xsl:text><xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
-                </xsl:if>
+&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p'<xsl:value-of select="$sp"/>' -D <xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
         </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

@@ -4,11 +4,12 @@
     <xsl:param name="p"/>
     <xsl:param name="mysqlPath"/>
     <xsl:param name="sedPath"/>
+    <xsl:param name="tempFolder"/>
+    <xsl:param name="tableName"/>
     <xsl:output method="text"/>
     <xsl:template match="/">
-        <xsl:apply-templates select="//Table"/>
-    </xsl:template>
-    <xsl:template match="Table">
-&quot;<xsl:value-of select="$mysqlPath"/>&quot; -B -u <xsl:value-of select="$u"/> -p<xsl:value-of select="$p"/><xsl:text> </xsl:text><xsl:value-of select="//Database/@name"/> -N -e "SELECT * FROM <xsl:value-of select="@name"/>;" > <xsl:value-of select="$tempFolder"/><xsl:value-of select="@name"/>.csv | &quot;<xsl:value-of select="$sedPath"/>&quot; "s/'/\'/;s/\t/\",\"/g;s/^/\"/;s/$/\"/;s/\n//g"
+        <xsl:for-each select="//Table">
+LOAD DATA INFILE '<xsl:value-of select="$tempFolder"/><xsl:value-of select="./@name"/>.csv'. INTO TABLE <xsl:value-of select="./@name"/> FIELDS TERMINATED BY '\t';
+        </xsl:for-each>
     </xsl:template>
 </xsl:stylesheet>

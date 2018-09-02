@@ -16,11 +16,11 @@
             <password>Pa$$w0rd</password>
         </destination>
     </copySettings>
-    <bcp path="C:\Program%20Files\Microsoft%20SQL%20Server\Client%20SDK\ODBC\130\Tools\Binn\bcp.exe"/>
+    <bcp path="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\bcp.exe"/>
     <sqlcmd path="sqlcmd"/>
-    <psql path="C:\Program%20Files\PostgreSQL\10\bin\psql.exe"/>
-    <mysql path="C:\Program%20Files\MariaDB%2010.2\bin\mysql.exe"/>
+    <psql path="C:\Program Files\PostgreSQL\10\bin\psql.exe"/>
+    <mysql path="C:\Program Files\MariaDB 2010.2\bin\mysql.exe"/>
     <sqlite path=""/>
-    <sed path="C:\Program%20Files%20(x86)\GnuWin32\bin\sed.exe"/>
+    <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
 </settings>
 
