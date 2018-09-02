@@ -5,10 +5,11 @@
     <xsl:param name="mysqlPath"/>
     <xsl:param name="sedPath"/>
     <xsl:output method="text"/>
+    <xsl:variable name="varMysqlPath" select="$mysqlPath">
     <xsl:template match="/">
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-&quot;<xsl:value-of select="$mysqlPath"/>&quot; -B -u <xsl:value-of select="$u"/> -p<xsl:value-of select="$p"/><xsl:text> </xsl:text><xsl:value-of select="//Database/@name"/> -N -e "SELECT * FROM <xsl:value-of select="@name"/>;" > csvexport/<xsl:value-of select="@name"/>.csv | &quot;<xsl:value-of select="$sedPath"/>&quot; "s/'/\'/;s/\t/\",\"/g;s/^/\"/;s/$/\"/;s/\n//g"
+&quot;<xsl:value-of select="$varMysqlPath"/>&quot; -B -u <xsl:value-of select="$u"/> -p<xsl:value-of select="$p"/><xsl:text> </xsl:text><xsl:value-of select="//source/database/text()"/> -N -e "SELECT * FROM <xsl:value-of select="@name"/>;" > <xsl:value-of select="$tempFolder"/><xsl:value-of select="@name"/>.csv | &quot;<xsl:value-of select="$sedPath"/>&quot; "s/'/\'/;s/\t/\",\"/g;s/^/\"/;s/$/\"/;s/\n//g"
     </xsl:template>
 </xsl:stylesheet>

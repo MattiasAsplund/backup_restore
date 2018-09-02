@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<settings shell="cmd">
+<settings shell="cmd" tempFolder="c:\dev\temp2\>
     <copySettings>
         <source>
             <provider>mysql</provider>

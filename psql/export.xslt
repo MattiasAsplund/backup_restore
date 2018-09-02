@@ -5,6 +5,6 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-\copy <xsl:value-of select="@name"/> to 'csvexport/<xsl:value-of select="@name"/>.csv' delimiter E'\t' null as 'NULL';
+\copy <xsl:value-of select="@name"/> to '<xsl:value-of select="$tempFolder"/><xsl:value-of select="@name"/>.csv' delimiter E'\t' null as 'NULL';
     </xsl:template>
 </xsl:stylesheet>

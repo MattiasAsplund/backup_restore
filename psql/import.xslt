@@ -5,6 +5,6 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-psql -h localhost -p 5432 -d employees -U postgres -W -c "\copy <xsl:value-of select="@name"/> from csvexport/<xsl:value-of select="@name"/>.csv with delimiter E'\t' null as 'NULL'" 
+psql -h localhost -p 5432 -d employees -U postgres -W -c "\copy <xsl:value-of select="@name"/> from <xsl:value-of select="$tempFolder"/><xsl:value-of select="@name"/>.csv with delimiter E'\t' null as 'NULL'" 
     </xsl:template>
 </xsl:stylesheet>
