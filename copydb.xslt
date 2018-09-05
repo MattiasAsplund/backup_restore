@@ -98,7 +98,7 @@ xsltproc psql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:val
                 <xsl:if test="$shell='bash'">
 xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
 &quot;<xsl:value-of select="//sqlite/@path"/>&quot;  <xsl:value-of select="$dDir"/><xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>createtables.sql
-xsltproc sqlite/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sql
+xsltproc --stringparam tempFolder <xsl:value-of select="$tempFolder"/> sqlite/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sql
 &quot;<xsl:value-of select="//sqlite/@path"/>&quot;  <xsl:value-of select="$dDir"/><xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>import.sql
 xsltproc --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" sqlite/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
 &quot;<xsl:value-of select="//sqlite/@path"/>&quot;  <xsl:value-of select="$dDir"/><xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
