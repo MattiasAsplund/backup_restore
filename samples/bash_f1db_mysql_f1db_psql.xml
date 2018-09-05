@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<settings shell="bash" tempFolder="/home/mas/temp/">
+    <copySettings>
+        <source>
+            <provider>mysql</provider>
+            <host>localhost</host>
+            <database>f1db</database>
+            <user>root</user>
+            <password>Pa$$w0rd</password>
+        </source>
+        <destination>
+            <provider>psql</provider>
+            <database>f1db</database>
+            <user>postgres</user>
+            <password>Pa$$w0rd</password>
+        </destination>
+    </copySettings>
+    <bcp path="bcp"/>
+    <sqlcmd path="sqlcmd"/>
+    <psql path="psql"/>
+    <mysql path="mysql"/>
+    <sqlite path=""/>
+    <sed path="sed"/>
+</settings>
+

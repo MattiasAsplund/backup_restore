@@ -86,13 +86,12 @@ xsltproc --path <xsl:value-of select="$tempFolder"/> --stringparam tempFolder "<
         </xsl:if>
 
         <xsl:if test="$dP='psql'">
-&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -c 'create database <xsl:value-of select="$dbname"/>'
-xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dbname"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
-&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -d <xsl:value-of select="$dbname"/> &lt; <xsl:value-of select="$tempFolder"/>createtables.sql
-xsltproc --stringparam -u postgres --stringparam p $'Pa$$w0rd' psql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dbname"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
+xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
+&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -d <xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>createtables.sql
+xsltproc --stringparam tempFolder <xsl:value-of select="$tempFolder"/> --stringparam dD <xsl:value-of select="$dD"/> --stringparam -u <xsl:value-of select="$du"/> --stringparam p $'<xsl:value-of select="$dp"/>' psql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
 . <xsl:value-of select="$tempFolder"/>import.sh
 xsltproc psql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
-&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -d <xsl:value-of select="$dbname"/> &lt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
+&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -d <xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
         </xsl:if>
 
         <xsl:if test="$dP='sqlite'">
