@@ -20,12 +20,15 @@ from
     union
     select 4, m.name, c.cid, '<Field name="' || c.name || '" type="' || 
         case
-            when c.type like 'varchar%' then c.type
-            when c.type='int' then 'int'
-            when c.type='date' then 'date'
-            when c.type='float' then 'float'
-            when c.type='time' then 'time'
-            when c.type like 'char%' then c.type
+            when c.type like 'varchar%' then lower(c.type)
+            when c.type like 'nvarchar%' then lower(c.type)
+            when c.type like 'char%' then lower(c.type)
+            when c.type like 'nchar%' then lower(c.type)
+            when lower(c.type)='datetime' then 'datetime'
+            when lower(c.type)='integer' then 'int'
+            when lower(c.type)='date' then 'date'
+            when lower(c.type)='float' then 'float'
+            when lower(c.type)='time' then 'time'
         end || '" nullable="' || CASE WHEN c."notnull"=1 THEN 'yes' ELSE 'no' END || '"/>'
     from
         sqlite_master m, pragma_table_info(m.name) c
