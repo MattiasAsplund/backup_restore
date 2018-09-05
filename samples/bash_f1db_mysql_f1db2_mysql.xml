@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<settings shell="bash" tempFolder="/home/mas/backup_restore/output/">
+<settings shell="bash" tempFolder="/home/mas/temp/">
     <copySettings>
         <source>
             <provider>mysql</provider>

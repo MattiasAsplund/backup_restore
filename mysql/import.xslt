@@ -9,7 +9,7 @@
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:for-each select="//Table">
-LOAD DATA INFILE '<xsl:value-of select="$tempFolder"/><xsl:value-of select="./@name"/>.csv'. INTO TABLE <xsl:value-of select="./@name"/> FIELDS TERMINATED BY '\t';
+LOAD DATA LOCAL INFILE '<xsl:value-of select="$tempFolder"/><xsl:value-of select="./@name"/>.csv' INTO TABLE <xsl:value-of select="./@name"/> FIELDS TERMINATED BY '\t';
         </xsl:for-each>
     </xsl:template>
 </xsl:stylesheet>
