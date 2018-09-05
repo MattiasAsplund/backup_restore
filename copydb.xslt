@@ -80,7 +80,7 @@ xsltproc --stringparam tempFolder <xsl:value-of select="$bashTempFolder"/> --pat
 &quot;<xsl:value-of select="//sqlite/@path"/>&quot; <xsl:value-of select="$sDir"/><xsl:value-of select="$sD"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
             </xsl:if>
             <xsl:if test="$shell='bash'">
-xsltproc --path <xsl:value-of select="$tempFolder"/> --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" --stringparam sqlitePath "<xsl:value-of select="$sqlitePath"/>" --stringparam i "<xsl:value-of select="$sI"/>" --stringparam u <xsl:value-of select="$su"/> --stringparam p $'<xsl:value-of select="$sp"/>' --stringparam d $'<xsl:value-of select="$sD"/>' mssql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sh
+xsltproc --stringparam tempFolder <xsl:value-of select="$bashTempFolder"/> --path <xsl:value-of select="$tempFolder"/> sqlite/export.xslt <xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sql
 &quot;<xsl:value-of select="//sqlite/@path"/>&quot; <xsl:value-of select="$sDir"/><xsl:value-of select="$sD"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
             </xsl:if>
         </xsl:if>
@@ -116,7 +116,6 @@ xsltproc --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" sqlite/
         <xsl:if test="$dP='mssql'">
                 <xsl:choose>
                         <xsl:when test="$dI='yes'">
-sqlcmd -E <xsl:value-of select="$dp"/> -q "create database <xsl:value-of select="$dD"/>"
 xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
 sqlcmd -d <xsl:value-of select="$dD"/> -E -i <xsl:value-of select="$tempFolder"/>createtables.sql
 xsltproc mssql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
@@ -125,7 +124,6 @@ xsltproc psql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:val
 sqlcmd -d <xsl:value-of select="$dD"/> -E -i <xsl:value-of select="$tempFolder"/>applyconstraints.sql
                         </xsl:when>
                         <xsl:otherwise>
-sqlcmd -U <xsl:value-of select="$du"/> -P <xsl:value-of select="$dp"/> -q "create database <xsl:value-of select="$dbname"/>"
 xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
 sqlcmd -d <xsl:value-of select="$dD"/> -U <xsl:value-of select="$du"/> -P <xsl:value-of select="$dp"/> -i <xsl:value-of select="$tempFolder"/>createtables.sql
 xsltproc mssql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
