@@ -1,0 +1,12 @@
+        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$sP='sqlite'">
+&quot;<xsl:value-of select="//sqlite/@path"/>&quot; <xsl:value-of select="$sDir"/><xsl:value-of select="$sD"/> &lt; sqlite/exportdefinition.sql &gt; <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
+            <xsl:if test="$shell='cmd'">
+xsltproc --stringparam tempFolder <xsl:value-of select="$bashTempFolder"/> --path <xsl:value-of select="$tempFolder"/> sqlite\export.xslt <xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sql
+&quot;<xsl:value-of select="//sqlite/@path"/>&quot; <xsl:value-of select="$sDir"/><xsl:value-of select="$sD"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
+            </xsl:if>
+            <xsl:if test="$shell='bash'">
+xsltproc --stringparam tempFolder <xsl:value-of select="$bashTempFolder"/> --path <xsl:value-of select="$tempFolder"/> sqlite/export.xslt <xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sql
+&quot;<xsl:value-of select="//sqlite/@path"/>&quot; <xsl:value-of select="$sDir"/><xsl:value-of select="$sD"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
+            </xsl:if>
+        </xsl:if>
+

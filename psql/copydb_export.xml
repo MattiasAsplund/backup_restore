@@ -1,0 +1,11 @@
+       <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$sP='psql'">
+&quot;<xsl:value-of select="//psql/@path"/>&quot; -U <xsl:value-of select="$su"/> -d <xsl:value-of select="$sD"/> -t &lt; psql/exportdefinition.sql &gt;<xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>_temp.xml
+            <xsl:if test="$shell='cmd'">
+removetrailingspaces.cmd <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>_temp.xml <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
+            </xsl:if>
+            <xsl:if test="$shell='bash'">
+. ./removetrailingspaces.sh <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>_temp.xml <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
+            </xsl:if>
+xsltproc --stringparam tempFolder <xsl:value-of select="$tempFolder"/> --stringparam u <xsl:value-of select="$su"/> --stringparam p $'<xsl:value-of select="$sp"/>' psql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sql
+&quot;<xsl:value-of select="//psql/@path"/>&quot; -U <xsl:value-of select="$su"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
+        </xsl:if>

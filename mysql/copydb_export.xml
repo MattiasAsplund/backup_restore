@@ -1,0 +1,12 @@
+        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$sP='mysql'">
+&quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p'<xsl:value-of select="$sp"/>' -D <xsl:value-of select="$sD"/> -N &lt; mysql/exportdefinition.sql &gt;<xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
+                <xsl:if test="$shell='bash'">
+xsltproc --stringparam tempFolder '<xsl:value-of select="$tempFolder"/>' --stringparam u '<xsl:value-of select="$su"/>' --stringparam p '<xsl:value-of select="$sp"/>' --stringparam d '<xsl:value-of select="$sD"/>' --stringparam mysqlPath '<xsl:value-of select="$varMysqlPath"/>' --stringparam sedPath '<xsl:value-of select="//sed/@path"/>' mysql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sh
+. <xsl:value-of select="$tempFolder"/>export.sh
+                </xsl:if>
+                <xsl:if test="$shell='cmd'">
+xsltproc --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam d '<xsl:value-of select="$sD"/>' --stringparam mysqlPath "<xsl:value-of select="$varMysqlPath"/>" --stringparam sedPath "<xsl:value-of select="//sed/@path"/>" mysql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.cmd
+@CALL <xsl:value-of select="$tempFolder"/>export.cmd
+                </xsl:if>
+        </xsl:if>
+

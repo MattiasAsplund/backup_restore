@@ -1,0 +1,19 @@
+        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$sP='mssql'">
+            <xsl:choose>
+                <xsl:when test="$sI='yes'">
+&quot;<xsl:value-of select="//sqlcmd/@path"/>&quot; -d <xsl:value-of select="$sD"/> -E -h -1 -i mssql/exportdefinition.sql &gt;<xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
+                </xsl:when>
+                <xsl:otherwise>
+&quot;<xsl:value-of select="//sqlcmd/@path"/>&quot; -d <xsl:value-of select="$sD"/> -U <xsl:value-of select="$su"/> -P <xsl:value-of select="$sp"/> -h -1 -i mssql/exportdefinition.sql &gt;<xsl:value-of select="$tempFolder"/><xsl:value-of select="$dbname"/>.xml
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="$shell='cmd'">
+xsltproc --stringparam bcpPath "<xsl:value-of select="$bcpPath"/>" --stringparam tempFolder "<xsl:value-of select="$tempFolder"/>" --stringparam i <xsl:value-of select="$sI"/> --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam d "<xsl:value-of select="$sD"/>" mssql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.cmd
+@CALL <xsl:value-of select="$tempFolder"/>export.cmd
+            </xsl:if>
+            <xsl:if test="$shell='bash'">
+xsltproc --stringparam bcpPath "<xsl:value-of select="$bcpPath"/>" --stringparam i "<xsl:value-of select="$sI"/>" --stringparam u <xsl:value-of select="$su"/> --stringparam p $'<xsl:value-of select="$sp"/>' --stringparam d $'<xsl:value-of select="$sD"/>' mssql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sh
+. <xsl:value-of select="$tempFolder"/>export.sh
+            </xsl:if>
+        </xsl:if>
+
