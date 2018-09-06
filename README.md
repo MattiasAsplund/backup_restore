@@ -21,8 +21,8 @@ backup_restore will work at least on MSSQL/Sqlite/MySQL/MariaDB/PostgreSQL with 
 
 - Install Chinook on MSSQL (https://github.com/lerocha/chinook-database/tree/master/ChinookDatabase/DataSources)
 
-- Generate a Windows shell script that performs the copy: _xsltproc --xincludestyle copydb.xslt samples/cmd_chinook_mssql_sqlite.xml > c:\Dev\Temp\copydb.cmd_
+- Generate a Windows shell script that performs the copy: __xsltproc --xincludestyle copydb.xslt samples/cmd_chinook_mssql_sqlite.xml > c:\Dev\Temp\copydb.cmd__
 
-- c:\Dev\Temp\copydb.cmd
+- Execute the Script: __c:\Dev\Temp\copydb.cmd__
 
 ## Congratulations, you have migrated a database between two RDBMS:es!
