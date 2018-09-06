@@ -13,8 +13,16 @@ backup_restore will work at least on MSSQL/Sqlite/MySQL/MariaDB/PostgreSQL with 
 
 - Create a configuration file (see samples folder)
 
-- xsltproc copydb.xslt configfile.xml > \copydb.cmd
+- xsltproc --xincludestyle copydb.xslt configfile.xml > \copydb.cmd
 
 - output\copydb.cmd
+
+## Example: Backup/Restore Chinook between MSSQL and Sqlite from Windows
+
+- Install Chinook on MSSQL (https://github.com/lerocha/chinook-database/tree/master/ChinookDatabase/DataSources)
+
+- xsltproc --xincludestyle copydb.xslt samples/cmd_chinook_mssql_sqlite.xml > c:\Dev\Temp\copydb.cmd
+
+- c:\Dev\Temp\copydb.cmd
 
 ## Congratulations, you have migrated a database between two RDBMS:es!
