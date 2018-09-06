@@ -6,4 +6,3 @@ xsltproc --stringparam tempFolder <xsl:value-of select="$tempFolder"/> --stringp
 xsltproc mysql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
 &quot;<xsl:value-of select="//mysql/@path"/>&quot; -u <xsl:value-of select="$su"/> -p'<xsl:value-of select="$sp"/>' -D <xsl:value-of select="$dD"/> &lt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
         </xsl:if>
-    </xsl:template>
