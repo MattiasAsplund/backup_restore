@@ -22,28 +22,34 @@ from
 
     select top 100 percent 4, s.name, t.name, 0, c.ordinal_position /*, c.character_maximum_length, c.numeric_precision, c.numeric_scale */, CONCAT('<Field name="', co.name, '" type="', 
         case
-            when ty.name='varchar' then CONCAT(ty.name, '(' + CAST(c.character_maximum_length AS NVARCHAR(10)) + ')')
+            when ty.name='varchar' then 'varchar'
+            when ty.name='nvarchar' then 'nvarchar'
             when ty.name='bit' then 'bit'
             when ty.name='numeric' then 'decimal'
             when ty.name='decimal' then 'decimal'
             when ty.name='int' then 'int'
             when ty.name='date' then 'date'
+            when ty.name='datetime' then 'datetime'
             when ty.name='float' then 'float'
             when ty.name='time' then 'time'
             when ty.name='char' then 'char'
+            when ty.name='nchar' then 'nchar'
         end, CONCAT('" nullable="', lower(c.is_nullable), '" length="', CAST(c.character_maximum_length AS NVARCHAR(10)), '"', ' precision="', CAST(c.numeric_precision AS NVARCHAR(10)), '" scale="', CAST(c.numeric_scale AS NVARCHAR(10)), '"/>'))
     from
         sys.tables t
     inner join
-        INFORMATION_SCHEMA.COLUMNS c on c.table_name = t.name
-    inner join
-        sys.columns co on co.name = c.column_name
-    inner join
-        sys.types ty on ty.system_type_id=co.system_type_id
+        sys.columns co on t.object_id = co.object_id
 	inner join
 		sys.schemas s on s.schema_id=t.schema_id
+    inner join
+        INFORMATION_SCHEMA.COLUMNS c on c.table_name = t.name
+		AND c.table_schema = s.name
+		AND c.column_name = co.name
+    inner join
+        sys.types ty on ty.system_type_id=co.system_type_id
+		  and ty.name <> 'sysname'
     order by
-        c.ordinal_position
+        s.name, t.name, c.ordinal_position
 
     union
 
@@ -104,15 +110,17 @@ from
 
     union
 
-    select top 100 percent 10, 'x', object_name(o.object_id), (ROW_NUMBER() OVER (PARTITION BY i.object_id ORDER BY i.object_id)) + (ROW_NUMBER() OVER (PARTITION BY object_name(o.object_id) ORDER BY object_name(o.object_id))) * 10, ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
+    select top 100 percent 10, s.name, object_name(o.object_id), (ROW_NUMBER() OVER (PARTITION BY i.object_id ORDER BY i.object_id)) + (ROW_NUMBER() OVER (PARTITION BY object_name(o.object_id) ORDER BY object_name(o.object_id))) * 10, ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
     from
         sys.indexes i 
     inner join 
         sys.objects o on i.object_id = o.object_id
-    join sys.index_columns ic on ic.object_id = i.object_id 
+    inner join sys.index_columns ic on ic.object_id = i.object_id 
         and ic.index_id = i.index_id
-    join sys.columns co on co.object_id = i.object_id 
+    inner join sys.columns co on co.object_id = i.object_id 
         and co.column_id = ic.column_id
+    inner join sys.tables t on t.object_id = o.object_id
+    inner join sys.schemas s on s.schema_id = t.schema_id
     where i.[type] = 2 
         and i.is_unique = 0 
         and i.is_primary_key = 0
@@ -149,6 +157,6 @@ from
     inner JOIN
         sys.schemas s on s.schema_id = t.schema_id
     union
-    select 999, '', 'xxx', 0, 0, '</Database>'
+    select 999, 'xxx', 'xxx', 0, 0, '</Database>'
 ) db
 order by db.[schema], db.tbl, db.sort, db.innerSort, db.col
