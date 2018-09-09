@@ -20,8 +20,9 @@ from
         sys.schemas s on s.schema_id = t.schema_id
     union
 
-    select top 100 percent 4, s.name, t.name, 0, c.ordinal_position /*, c.character_maximum_length, c.numeric_precision, c.numeric_scale */, CONCAT('<Field name="', co.name, '" type="', 
-        case
+    select top 100 percent 4, c.table_schema, c.table_name, 0, c.ordinal_position /*, c.character_maximum_length, c.numeric_precision, c.numeric_scale */, CONCAT('<Field name="', c.column_name, '" type="', 
+        (select top 1 concat(
+		case
             when ty.name='varchar' then 'varchar'
             when ty.name='nvarchar' then 'nvarchar'
             when ty.name='bit' then 'bit'
@@ -34,22 +35,35 @@ from
             when ty.name='time' then 'time'
             when ty.name='char' then 'char'
             when ty.name='nchar' then 'nchar'
-        end, CONCAT('" nullable="', lower(c.is_nullable), '" length="', CAST(c.character_maximum_length AS NVARCHAR(10)), '"', ' precision="', CAST(c.numeric_precision AS NVARCHAR(10)), '" scale="', CAST(c.numeric_scale AS NVARCHAR(10)), '"/>'))
+            when ty.name='tinyint' then 'tinyint'
+            when ty.name='smallint' then 'smallint'
+            when ty.name='money' then 'money'
+            when ty.name='xml' then 'xml'
+            when ty.name='uniqueidentifier' then 'uniqueidentifier'
+            when ty.name='hierarchyid' then 'hierarchyid'
+            when ty.name='varbinary' then 'varbinary'
+            when ty.name='smallmoney' then 'smallmoney'
+        end, '" nullable="', lower(c.is_nullable), '" length="', CAST(c.character_maximum_length AS NVARCHAR(10)), '"', ' precision="', CAST(c.numeric_precision AS NVARCHAR(10)), '" scale="', CAST(c.numeric_scale AS NVARCHAR(10)), '"/>')
+		from 
+			sys.types ty
+		inner join
+			sys.columns co on co.system_type_id=ty.system_type_id
+		inner join
+			sys.tables t on t.name = c.table_name
+			and t.object_id=co.object_id
+		inner join
+			sys.schemas s on s.name = c.table_schema
+			and s.schema_id = t.schema_id
+		where co.name = c.column_name
+		))
     from
-        sys.tables t
-    inner join
-        sys.columns co on t.object_id = co.object_id
-	inner join
-		sys.schemas s on s.schema_id=t.schema_id
-    inner join
-        INFORMATION_SCHEMA.COLUMNS c on c.table_name = t.name
-		AND c.table_schema = s.name
-		AND c.column_name = co.name
-    inner join
-        sys.types ty on ty.system_type_id=co.system_type_id
-		  and ty.name <> 'sysname'
+        INFORMATION_SCHEMA.COLUMNS c
+	LEFT OUTER JOIN INFORMATION_SCHEMA.VIEWS b ON c.TABLE_CATALOG = b.TABLE_CATALOG
+		AND c.TABLE_SCHEMA = b.TABLE_SCHEMA
+		AND c.TABLE_NAME = b.TABLE_NAME
+	where b.table_catalog is null
     order by
-        s.name, t.name, c.ordinal_position
+        c.table_schema, c.table_name, c.ordinal_position
 
     union
 
@@ -106,6 +120,7 @@ from
         sys.schemas s on s.schema_id = t.schema_id
     where
         i.is_primary_key = 0
+        and i.name is not null
 	order by t.name
 
     union
@@ -139,6 +154,7 @@ from
         sys.schemas s on s.schema_id = t.schema_id
     where
         i.is_primary_key = 0
+        and i.name is not null
 	order by t.name
 
     union
