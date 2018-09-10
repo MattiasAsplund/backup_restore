@@ -3,16 +3,16 @@
                         <xsl:when test="$dI='yes'">
 xsltproc mssql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
 sqlcmd -d <xsl:value-of select="$dD"/> -E -i <xsl:value-of select="$tempFolder"/>createtables.sql
-xsltproc mssql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
-. <xsl:value-of select="$tempFolder"/>import.sh
+xsltproc --stringparam bcpPath "<xsl:value-of select="$bcpPath"/>" --stringparam tempFolder "<xsl:value-of select='$bashTempFolder'/>" --stringparam i <xsl:value-of select="$sI"/> --stringparam u "<xsl:value-of select="$su"/>" --stringparam p "<xsl:value-of select="$sp"/>" --stringparam d "<xsl:value-of select="$dD"/>" mssql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/> <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.cmd
+@CALL <xsl:value-of select="$tempFolder"/>import.cmd
 xsltproc psql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
 sqlcmd -d <xsl:value-of select="$dD"/> -E -i <xsl:value-of select="$tempFolder"/>applyconstraints.sql
                         </xsl:when>
                         <xsl:otherwise>
 xsltproc psql/createtables.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>createtables.sql
 sqlcmd -d <xsl:value-of select="$dD"/> -U <xsl:value-of select="$du"/> -P <xsl:value-of select="$dp"/> -i <xsl:value-of select="$tempFolder"/>createtables.sql
-xsltproc mssql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.sh
-. <xsl:value-of select="$tempFolder"/>import.sh
+xsltproc mssql/import.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>import.cmd
+@CALL <xsl:value-of select="$tempFolder"/>import.sh
 xsltproc psql/applyconstraints.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$dD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>applyconstraints.sql
 sqlcmd -d <xsl:value-of select="$dD"/> -U <xsl:value-of select="$du"/> -P <xsl:value-of select="$dp"/> -i <xsl:value-of select="$tempFolder"/>applyconstraints.sql
                         </xsl:otherwise>
