@@ -5,7 +5,7 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-        CREATE TABLE <xsl:value-of select="@name"/> (
+        CREATE TABLE <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> (
             <xsl:for-each select="Fields/Field">
                 <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:apply-templates select="."/><xsl:if test="position() != last()">,</xsl:if>
             </xsl:for-each>
