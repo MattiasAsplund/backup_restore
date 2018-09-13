@@ -1,23 +1,23 @@
 select db.content
 from
 (
-    select 0 sort, '' tbl, 0 col, '<?xml version="1.0"?>' content
+    select 0 sort, '' "schema", '' tbl, 0 col, '<?xml version="1.0"?>' content
     union
-    select 1, '', 0, CONCAT('<Database name="', database(), '">')
+    select 1, '', '', 0, CONCAT('<Database name="', database(), '">')
     union
-    select 2, t.table_name, 0, CONCAT('<Table name="', t.table_name, '">')
+    select 2, '', t.table_name, 0, CONCAT('<Table schema="', t.table_schema, '" name="', t.table_name, '">')
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 3, t.table_name, 0, '<Fields>'
+    select 3, '', t.table_name, 0, '<Fields>'
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 4, t.table_name, c.ordinal_position, CONCAT('<Field name="', c.column_name, '" type="', 
+    select 4, '', t.table_name, c.ordinal_position, CONCAT('<Field name="', c.column_name, '" type="', 
         case
             when c.data_type='varchar' then CONCAT(c.data_type, '(', c.character_maximum_length, ')')
             when c.data_type='int' then 'int'
@@ -34,19 +34,19 @@ from
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 5, t.table_name, 0, '</Fields>'
+    select 5, '', t.table_name, 0, '</Fields>'
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 6, t.table_name, 0, '<PrimaryKey>'
+    select 6, '', t.table_name, 0, '<PrimaryKey>'
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 7, t.table_name, kcu.ordinal_position, CONCAT('<Field name="', kcu.column_name, '" pos="', CAST(kcu.ordinal_position AS char(1)), '"/>')
+    select 7, '', t.table_name, kcu.ordinal_position, CONCAT('<Field name="', kcu.column_name, '" pos="', CAST(kcu.ordinal_position AS char(1)), '"/>')
     from
         information_schema.tables t 
     inner join
@@ -54,20 +54,20 @@ from
     where 
         t.table_schema = database() and t.table_type='BASE TABLE' and kcu.constraint_name='PRIMARY'
     union
-    select 8, t.table_name, 0, '</PrimaryKey>'
+    select 8, '', t.table_name, 0, '</PrimaryKey>'
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
 
-    select 9, t.table_name, 0, '<Indexes>'
+    select 9, '', t.table_name, 0, '<Indexes>'
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 10, t.table_name, 0, CONCAT('<Index name="', s.index_name, '">')
+    select 10, '', t.table_name, 0, CONCAT('<Index name="', s.index_name, '">')
     from
         information_schema.tables t
     inner join
@@ -75,7 +75,7 @@ from
     where 
         t.table_schema = database() and t.table_type='BASE TABLE' and s.index_name<>'PRIMARY'
     union
-    select 11, t.table_name, s.seq_in_index, CONCAT('<Field name="', s.column_name, '" pos="', CAST(s.seq_in_index AS char(1)), '"/>')
+    select 11, '', t.table_name, s.seq_in_index, CONCAT('<Field name="', s.column_name, '" pos="', CAST(s.seq_in_index AS char(1)), '"/>')
     from
         information_schema.tables t 
     inner join
@@ -83,7 +83,7 @@ from
     where 
         t.table_schema = database() and t.table_type='BASE TABLE' and s.index_name<>'PRIMARY'
     union
-    select 12, t.table_name, 0, '</Index>'
+    select 12, '', t.table_name, 0, '</Index>'
     from
         information_schema.tables t
     inner join
@@ -92,7 +92,7 @@ from
         t.table_schema = database() and t.table_type='BASE TABLE' and s.index_name<>'PRIMARY'
 
     union
-    select 13, t.table_name, 0, '</Indexes>'
+    select 13, '', t.table_name, 0, '</Indexes>'
     from
         information_schema.tables t
     where 
@@ -100,13 +100,13 @@ from
 
     union
 
-    select 14, t.table_name, 0, CONCAT('</Table>')
+    select 14, '', t.table_name, 0, CONCAT('</Table>')
     from
         information_schema.tables t
     where 
         t.table_schema = database() and t.table_type='BASE TABLE'
     union
-    select 999, 'xxx', 0, '</Database>'
+    select 999, 'xxx', 'xxx', 0, '</Database>'
 ) db
 order by db.tbl, db.sort, db.col
 
