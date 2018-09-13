@@ -1,6 +1,6 @@
 # Overview of backup_restore
 
-My goal in writing backup_restore is to learn about diffent database servers and to make it simple to transfer data between them.
+My goal in writing backup_restore is to learn about different database servers and to make it simple to transfer data between them.
 
 One aspect that I like about backup_restore, is that most of it is written
 in declarative languages (XML/XSLT/SQL) which makes it easy to inspect
