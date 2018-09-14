@@ -12,7 +12,12 @@
         );
     </xsl:template>
     <xsl:template match="Field">
-<xsl:value-of select="@type"/> <xsl:if test="@length">(<xsl:value-of select="@length"/>)</xsl:if>
+        <xsl:choose>
+            <xsl:when test="@type='nvarchar'">varchar</xsl:when>
+            <xsl:when test="@type='datetime'">timestamp</xsl:when>
+            <xsl:otherwise><xsl:value-of select="@type"/></xsl:otherwise>
+        </xsl:choose>
+<xsl:if test="@length != ''">(<xsl:value-of select="@length"/>)</xsl:if>
 <xsl:if test="@nullable='no'"> NOT NULL</xsl:if><xsl:text>&#xa;</xsl:text>
     </xsl:template>
 </xsl:stylesheet>

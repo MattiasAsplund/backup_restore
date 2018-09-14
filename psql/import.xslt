@@ -9,6 +9,6 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-psql -h localhost -p 5432 -U postgres -d <xsl:value-of select="$dD"/> -W -c "\copy <xsl:value-of select="@schema"/><xsl:value-of select="@name"/> from '<xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv' with delimiter E'\t' null as 'NULL'" 
+\copy <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> from '<xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv' with encoding 'iso88591' delimiter E'\t' null as ''
     </xsl:template>
 </xsl:stylesheet>
