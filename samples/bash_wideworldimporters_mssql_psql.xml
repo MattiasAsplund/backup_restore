@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<settings shell="bash" tempFolder="~/temp/">
+    <copySettings>
+        <source>
+            <provider>mssql</provider>
+            <host>localhost</host>
+            <port>1433</port>
+            <database>WideWorldImporters</database>
+            <user>sa</user>
+            <password>Pa$$w0rd</password>
+        </source>
+        <destination>
+            <provider>psql</provider>
+            <host>localhost</host>
+            <user>postgres</user>
+            <password>Pa$$w0rd</password>
+            <database>WideWorldImporters</database>
+        </destination>
+    </copySettings>
+    <bcp path="bcp"/>
+    <sqlcmd path="sqlcmd"/>
+    <psql path="psql"/>
+    <mysql path="C:\Program Files\MariaDB 10.2\bin\mysql.exe"/>
+    <sqlite path=""/>
+    <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
+</settings>
+

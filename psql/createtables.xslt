@@ -20,6 +20,7 @@
             <xsl:when test="(@type='nvarchar' or @type='varchar') and @length='-1'">text</xsl:when>
             <xsl:when test="@type='nvarchar'">varchar</xsl:when>
             <xsl:when test="@type='datetime'">timestamp</xsl:when>
+            <xsl:when test="@type='datetime2'">timestamp</xsl:when>
             <xsl:when test="@type='tinyint'">int</xsl:when>
             <xsl:when test="@type='uniqueidentifier'">uuid</xsl:when>
             <xsl:when test="@type='hierarchyid'">varchar</xsl:when>

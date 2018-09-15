@@ -3,12 +3,14 @@
     <xsl:param name="shell" select="//settings/@shell"/>
     <xsl:param name="tempFolder" select="//settings/@tempFolder"/>
     <xsl:param name="sP" select="//settings/copySettings/source/provider/text()"/>
+    <xsl:param name="sH" select="//settings/copySettings/source/host/text()"/>
     <xsl:param name="sD" select="//settings/copySettings/source/database/text()"/>
     <xsl:param name="sI" select="//settings/copySettings/source/integratedSecurity/text()"/>
     <xsl:param name="su" select="//settings/copySettings/source/user/text()"/>
     <xsl:param name="sp" select="//settings/copySettings/source/password/text()"/>
     <xsl:param name="sDir" select="//settings/copySettings/source/directory/text()"/>
     <xsl:param name="dP" select="//settings/copySettings/destination/provider/text()"/>
+    <xsl:param name="dH" select="//settings/copySettings/destination/host/text()"/>
     <xsl:param name="dD" select="//settings/copySettings/destination/database/text()"/>
     <xsl:param name="dI" select="//settings/copySettings/destination/integratedSecurity/text()"/>
     <xsl:param name="du" select="//settings/copySettings/destination/user/text()"/>
