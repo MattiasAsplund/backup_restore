@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text"/>
+    <xsl:key name="tables-by-schemas" match="//Table" use="@schema"/>
     <xsl:template match="/">
+        <xsl:for-each select="//Table[not(@schema=preceding::Table/@schema)]">
+            CREATE SCHEMA "<xsl:value-of select="@schema" />";
+        </xsl:for-each>
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
