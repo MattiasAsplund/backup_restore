@@ -9,6 +9,6 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-\copy <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> from '<xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv' with encoding 'iso88591' delimiter E'\t' null as ''
+\copy "<xsl:value-of select="@schema"/>"."<xsl:value-of select="@name"/>" from '<xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv' with encoding 'iso88591' delimiter E'\t' null as ''
     </xsl:template>
 </xsl:stylesheet>
