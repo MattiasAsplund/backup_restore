@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<settings shell="cmd" tempFolder="c:\dev\temp2\">
+    <copySettings>
+        <source>
+            <provider>psql</provider>
+            <host>localhost</host>
+            <user>postgres</user>
+            <password>Pa$$w0rd</password>
+            <database>AdventureWorks2016</database>
+        </source>
+        <destination>
+            <provider>mssql</provider>
+            <host>localhost</host>
+            <port>1433</port>
+            <database>AdventureWorks2016B</database>
+            <integratedSecurity>yes</integratedSecurity>
+        </destination>
+    </copySettings>
+    <bcp path="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\bcp.exe"/>
+    <sqlcmd path="sqlcmd"/>
+    <psql path="C:\Program Files\PostgreSQL\10\bin\psql.exe"/>
+    <mysql path="C:\Program Files\MariaDB 10.2\bin\mysql.exe"/>
+    <sqlite path=""/>
+    <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
+</settings>
+

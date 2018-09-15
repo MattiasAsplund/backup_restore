@@ -2,10 +2,13 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text"/>
     <xsl:template match="/">
+        <xsl:for-each select="//Table[not(@schema=preceding::Table/@schema)]">
+            CREATE SCHEMA [<xsl:value-of select="@schema" />"];
+        </xsl:for-each>
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-        CREATE TABLE <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> (
+        CREATE TABLE [<xsl:value-of select="@schema"/>].[<xsl:value-of select="@name"/>] (
             <xsl:for-each select="Fields/Field">
                 [<xsl:value-of select="@name"/>]<xsl:text> </xsl:text><xsl:apply-templates select="."/><xsl:if test="position() != last()">,</xsl:if>
             </xsl:for-each>
