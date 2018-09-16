@@ -3,8 +3,10 @@
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:for-each select="//Table[not(@schema=preceding::Table/@schema)]">
-            CREATE SCHEMA [<xsl:value-of select="@schema" />]
-            GO
+            <xsl:if test="@schema != 'dbo'">
+                CREATE SCHEMA [<xsl:value-of select="@schema" />]
+                GO
+            </xsl:if>
         </xsl:for-each>
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
