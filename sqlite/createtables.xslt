@@ -5,14 +5,30 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-        CREATE TABLE <xsl:value-of select="@name"/> (
+        CREATE TABLE [<xsl:value-of select="@name"/>] (
             <xsl:for-each select="Fields/Field">
-                <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:apply-templates select="."/><xsl:if test="position() != last()">,</xsl:if>
+                [<xsl:value-of select="@name"/>]<xsl:text> </xsl:text><xsl:apply-templates select="."/><xsl:if test="position() != last()">,</xsl:if>
             </xsl:for-each>
         );
     </xsl:template>
     <xsl:template match="Field">
-<xsl:value-of select="@type"/> <xsl:if test="@length">(<xsl:value-of select="@length"/>)</xsl:if>
-<xsl:if test="@nullable='yes'"> NULL</xsl:if><xsl:text>&#xa;</xsl:text>
+<xsl:value-of select="@type"/> 
+    <xsl:choose>
+        <xsl:when test="@type = 'hierarchyid'"></xsl:when>
+        <xsl:when test="@type = 'xml'"></xsl:when>
+        <xsl:when test="@type = 'int'"></xsl:when>
+        <xsl:when test="@type = 'smallint'"></xsl:when>
+        <xsl:when test="@type = 'tinyint'"></xsl:when>
+        <xsl:when test="@type = 'bigint'"></xsl:when>
+        <xsl:when test="@type = 'image'"></xsl:when>
+        <xsl:when test="@type = 'text'"></xsl:when>
+        <xsl:when test="@type = 'ntext'"></xsl:when>
+        <xsl:when test="@type = 'money'"></xsl:when>
+        <xsl:when test="@type = 'smallmoney'"></xsl:when>
+        <xsl:when test="@length = -1"> (max)</xsl:when>
+        <xsl:when test="@precision != ''">(<xsl:value-of select="@precision"/>,<xsl:value-of select="@scale"/>)</xsl:when>
+        <xsl:when test="@length != ''">(<xsl:value-of select="@length"/>)</xsl:when>
+    </xsl:choose>
+<xsl:if test="@nullable='no'"> NOT NULL</xsl:if><xsl:text>&#xa;</xsl:text>
     </xsl:template>
 </xsl:stylesheet>

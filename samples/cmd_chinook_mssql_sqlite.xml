@@ -9,17 +9,16 @@
             <integratedSecurity>yes</integratedSecurity>
         </source>
         <destination>
-            <provider>psql</provider>
-            <database>chinookx</database>
-            <user>postgres</user>
-            <password>Pa$$w0rd</password>
+            <provider>sqlite</provider>
+            <database>chinook.db</database>
+            <directory>output/</directory>
         </destination>
     </copySettings>
     <bcp path="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\bcp.exe"/>
     <sqlcmd path="sqlcmd"/>
     <psql path="C:\Program Files\PostgreSQL\10\bin\psql.exe"/>
     <mysql path="C:\Program Files\MariaDB 10.2\bin\mysql.exe"/>
-    <sqlite path=""/>
+    <sqlite path="C:\Winbuilds\bin\sqlite3.exe"/>
     <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
 </settings>
 

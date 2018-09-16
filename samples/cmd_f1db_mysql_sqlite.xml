@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<settings shell="cmd" tempFolder="c:\dev\temp2\>
+<settings shell="cmd" tempFolder="c:\dev\temp2\">
     <copySettings>
         <source>
             <provider>mysql</provider>
@@ -18,7 +18,7 @@
     <sqlcmd path="sqlcmd"/>
     <psql path="C:\Program Files\PostgreSQL\10\bin\psql.exe"/>
     <mysql path="C:\Program Files\MariaDB 10.2\bin\mysql.exe"/>
-    <sqlite path=""/>
+    <sqlite path="C:\Winbuilds\bin\sqlite3.exe"/>
     <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
 </settings>
 

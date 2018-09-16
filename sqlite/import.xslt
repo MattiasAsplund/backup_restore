@@ -7,6 +7,6 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-.import <xsl:value-of select="$tempFolder"/><xsl:value-of select="@name"/>.csv <xsl:value-of select="@name"/>
+.import <xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv <xsl:value-of select="@name"/>
     </xsl:template>
 </xsl:stylesheet>
