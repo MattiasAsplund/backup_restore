@@ -29,7 +29,14 @@
         <xsl:when test="@type = 'hierarchyid'"></xsl:when>
         <xsl:when test="@type = 'xml'"></xsl:when>
         <xsl:when test="@type = 'int'"></xsl:when>
+        <xsl:when test="@type = 'smallint'"></xsl:when>
+        <xsl:when test="@type = 'tinyint'"></xsl:when>
         <xsl:when test="@type = 'bigint'"></xsl:when>
+        <xsl:when test="@type = 'image'"></xsl:when>
+        <xsl:when test="@type = 'text'"></xsl:when>
+        <xsl:when test="@type = 'ntext'"></xsl:when>
+        <xsl:when test="@type = 'money'"></xsl:when>
+        <xsl:when test="@type = 'smallmoney'"></xsl:when>
         <xsl:when test="@length = -1"> (max)</xsl:when>
         <xsl:when test="@precision != ''">(<xsl:value-of select="@precision"/>,<xsl:value-of select="@scale"/>)</xsl:when>
         <xsl:when test="@length != ''">(<xsl:value-of select="@length"/>)</xsl:when>

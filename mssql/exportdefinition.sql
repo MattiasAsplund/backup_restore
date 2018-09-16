@@ -45,6 +45,9 @@ from
             when ty.name='hierarchyid' then 'hierarchyid'
             when ty.name='varbinary' then 'varbinary'
             when ty.name='smallmoney' then 'smallmoney'
+            when ty.name='image' then 'image'
+            when ty.name='text' then 'text'
+            when ty.name='ntext' then 'ntext'
         end, '" nullable="', lower(c.is_nullable), '" length="', CAST(c.character_maximum_length AS NVARCHAR(10)), '"', ' precision="', CAST(c.numeric_precision AS NVARCHAR(10)), '" scale="', CAST(c.numeric_scale AS NVARCHAR(10)), '"/>')
 		from 
 			sys.types ty
