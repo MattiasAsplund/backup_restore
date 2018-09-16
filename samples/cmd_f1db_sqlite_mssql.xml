@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<settings shell="cmd" tempFolder="c:\dev\temp2\">
+    <copySettings>
+        <source>
+            <provider>sqlite</provider>
+            <database>f1db.db</database>
+            <directory>output/</directory>
+        </source>
+        <destination>
+            <provider>mssql</provider>
+            <host>localhost</host>
+            <port>1433</port>
+            <database>f1db</database>
+            <integratedSecurity>yes</integratedSecurity>
+        </destination>
+    </copySettings>
+    <bcp path="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\bcp.exe"/>
+    <sqlcmd path="sqlcmd"/>
+    <psql path="C:\Program Files\PostgreSQL\10\bin\psql.exe"/>
+    <mysql path="C:\Program Files\MariaDB 10.2\bin\mysql.exe"/>
+    <sqlite path="C:\Winbuilds\bin\sqlite3.exe"/>
+    <sed path="C:\Program Files (x86)\GnuWin32\bin\sed.exe"/>
+</settings>
+

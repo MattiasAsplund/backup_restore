@@ -7,7 +7,25 @@
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
     <xsl:template match="Table">
-.output <xsl:value-of select="$tempFolder"/><xsl:value-of select="@name"/>.csv
-SELECT * FROM  <xsl:value-of select="./@name"/>;
+.output <xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv
+SELECT 
+        <xsl:for-each select="Fields/Field">
+            <xsl:if test="@nullable = 'yes'">
+                IFNULL(
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="@type = 'float'">
+                    REPLACE(CAST(<xsl:value-of select="@name"/> AS text), '.', ',')
+                </xsl:when>
+                <xsl:otherwise>
+                    CAST(<xsl:value-of select="@name"/> AS text)
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="@nullable = 'yes'">
+                , '')
+            </xsl:if>
+            <xsl:if test="position() != last()">, </xsl:if>
+        </xsl:for-each>
+FROM  <xsl:value-of select="./@name"/>;
     </xsl:template>
 </xsl:stylesheet>

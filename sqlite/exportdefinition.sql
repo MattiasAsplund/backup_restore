@@ -5,7 +5,7 @@ from
     union
     select 1, '', 0, '<Database>'
     union
-    select 2, m.name, 0, '<Table name="' || m.name || '">'
+    select 2, m.name, 0, '<Table name="' || m.name || '" schema="dbo">'
     from
         sqlite_master m
     where 
@@ -26,10 +26,11 @@ from
             when c.type like 'nchar%' then lower(c.type)
             when lower(c.type)='datetime' then 'datetime'
             when lower(c.type)='integer' then 'int'
+            when lower(c.type)='int' then 'int'
             when lower(c.type)='date' then 'date'
             when lower(c.type)='float' then 'float'
             when lower(c.type)='time' then 'time'
-        end || '" nullable="' || CASE WHEN c."notnull"=1 THEN 'yes' ELSE 'no' END || '"/>'
+        end || '" nullable="' || CASE WHEN c."notnull"=1 THEN 'no' ELSE 'yes' END || '"/>'
     from
         sqlite_master m, pragma_table_info(m.name) c
     where 
