@@ -3,7 +3,8 @@
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:for-each select="//Table[not(@schema=preceding::Table/@schema)]">
-            CREATE SCHEMA [<xsl:value-of select="@schema" />"];
+            CREATE SCHEMA [<xsl:value-of select="@schema" />]
+            GO
         </xsl:for-each>
         <xsl:apply-templates select="//Table"/>
     </xsl:template>
@@ -27,7 +28,10 @@
     <xsl:choose>
         <xsl:when test="@type = 'hierarchyid'"></xsl:when>
         <xsl:when test="@type = 'xml'"></xsl:when>
+        <xsl:when test="@type = 'int'"></xsl:when>
+        <xsl:when test="@type = 'bigint'"></xsl:when>
         <xsl:when test="@length = -1"> (max)</xsl:when>
+        <xsl:when test="@precision != ''">(<xsl:value-of select="@precision"/>,<xsl:value-of select="@scale"/>)</xsl:when>
         <xsl:when test="@length != ''">(<xsl:value-of select="@length"/>)</xsl:when>
     </xsl:choose>
 <xsl:if test="@nullable='no'"> NOT NULL</xsl:if><xsl:text>&#xa;</xsl:text>
