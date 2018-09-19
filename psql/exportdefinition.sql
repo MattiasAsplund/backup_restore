@@ -70,7 +70,7 @@ from
 
     union
 
-    select 9, t.table_schema, t.table_name, 0, '<Indexes>'
+    select 9, t.table_schema, t.table_name, 0, '<ForeignKeys>'
     from
         information_schema.tables t
     where 
@@ -78,7 +78,38 @@ from
 
     union
 
-    select 10, t.table_schema, t.table_name, i.indrelid, CONCAT('<Index name="', c2.relname, '">')
+	select 10, tc.table_schema, tc.table_name, 0, CONCAT('<ForeignKey name="', tc.constraint_name, '" column="', kcu.column_name, '" referencedSchema="', ccu.table_schema, '" referencedTable="', ccu.table_name, '" referencedColumn="', ccu.column_name, '"/>')
+	FROM 
+	    information_schema.table_constraints AS tc 
+	    JOIN information_schema.key_column_usage AS kcu
+	      ON tc.constraint_name = kcu.constraint_name
+	      AND tc.table_schema = kcu.table_schema
+	    JOIN information_schema.constraint_column_usage AS ccu
+	      ON ccu.constraint_name = tc.constraint_name
+	      AND ccu.table_schema = tc.table_schema
+	    join information_schema.tables as t
+	      on t.table_schema = tc.table_schema and t.table_name = tc.table_name
+	WHERE constraint_type = 'FOREIGN KEY' and tc.table_schema not in ('pg_catalog', 'information_schema')
+	
+    union
+
+    select 11, t.table_schema, t.table_name, 0, '</ForeignKeys>'
+    from
+        information_schema.tables t
+    where 
+        t.table_type='BASE TABLE' and t.table_schema not in ('pg_catalog', 'information_schema')
+
+    union
+
+    select 12, t.table_schema, t.table_name, 0, '<Indexes>'
+    from
+        information_schema.tables t
+    where 
+        t.table_type='BASE TABLE' and t.table_schema not in ('pg_catalog', 'information_schema')
+
+    union
+
+    select 13, t.table_schema, t.table_name, i.indrelid, CONCAT('<Index name="', c2.relname, '">')
     from
         information_schema.tables t
 	inner join
@@ -93,7 +124,7 @@ from
 
     union
 
-    select 11, t.table_schema, t.table_name, i.indrelid, CONCAT('<Field name="', x.colname, '" pos="0"/>')
+    select 14, t.table_schema, t.table_name, i.indrelid, CONCAT('<Field name="', x.colname, '" pos="0"/>')
 --		t.table_name, c.oid::oid oid, c2.relname, x.colname 
     from
         information_schema.tables t
@@ -133,7 +164,7 @@ from
 
     union
 
-    select 12, t.table_schema, t.table_name, i.indrelid, '</Index>'
+    select 15, t.table_schema, t.table_name, i.indrelid, '</Index>'
     from
         information_schema.tables t
 	inner join
@@ -148,7 +179,7 @@ from
 
     union
 
-    select 13, t.table_schema, t.table_name, 0, '</Indexes>'
+    select 16, t.table_schema, t.table_name, 0, '</Indexes>'
     from
         information_schema.tables t
     where 
@@ -156,7 +187,7 @@ from
 
     union
 
-    select 14, t.table_schema, t.table_name, 0, CONCAT('</Table>')
+    select 17, t.table_schema, t.table_name, 0, CONCAT('</Table>')
     from
         information_schema.tables t
     where 
@@ -168,5 +199,3 @@ from
 
 ) db
 order by db."schema", db.tbl, db.sort, db.col
-
-

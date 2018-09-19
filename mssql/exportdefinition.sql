@@ -116,7 +116,7 @@ from
 
 	union
 
-SELECT 11, 'dbo', OBJECT_NAME(f.parent_object_id), 0, 0,
+SELECT 11, SCHEMA_NAME(f.schema_id), OBJECT_NAME(f.parent_object_id), 0, 0,
 	'<ForeignKey name="' + f.name + '" column="' + COL_NAME(fc.parent_object_id, fc.parent_column_id) + '" referencedSchema="' + SCHEMA_NAME(f.schema_id) + '" referencedTable="' + OBJECT_NAME (f.referenced_object_id) + '" referencedColumn="' + COL_NAME(fc.referenced_object_id, fc.referenced_column_id) + '"/>'
 FROM sys.foreign_keys AS f
 INNER JOIN sys.foreign_key_columns AS fc
