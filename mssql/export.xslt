@@ -15,10 +15,10 @@
     <xsl:template match="Table">
         <xsl:choose>
             <xsl:when test="$i='yes'">
-&quot;<xsl:value-of select="$bcpPath"/>&quot; <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> out <xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv -T -d <xsl:value-of select="$d"/> -S <xsl:value-of select="$s"/> -c -t "\t"
+&quot;<xsl:value-of select="$bcpPath"/>&quot; <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> out <xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv -T -d <xsl:value-of select="$d"/> -S <xsl:value-of select="$s"/> -c -C 65001 -t "\t"
             </xsl:when>
             <xsl:otherwise>
-&quot;<xsl:value-of select="$bcpPath"/>&quot; <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> out <xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv -U sa -P 'Pa$$w0rd' -d <xsl:value-of select="$d"/> -S <xsl:value-of select="$s"/> -c -t "\t"
+&quot;<xsl:value-of select="$bcpPath"/>&quot; <xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/> out <xsl:value-of select="$tempFolder"/><xsl:value-of select="@schema"/>.<xsl:value-of select="@name"/>.csv -U sa -P 'Pa$$w0rd' -d <xsl:value-of select="$d"/> -S <xsl:value-of select="$s"/> -c -C 65001 -t "\t"
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

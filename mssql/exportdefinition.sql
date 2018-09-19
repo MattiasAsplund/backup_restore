@@ -108,7 +108,31 @@ from
 
     union
 
-    select 9, s.name, t.name, 0, 0, '<Indexes>'
+	    select 10, s.name, t.name, 0, 0, '<ForeignKeys>'
+    from
+        sys.tables t
+    inner JOIN
+        sys.schemas s on s.schema_id = t.schema_id
+
+	union
+
+SELECT 11, 'dbo', OBJECT_NAME(f.parent_object_id), 0, 0,
+	'<ForeignKey name="' + f.name + '" column="' + COL_NAME(fc.parent_object_id, fc.parent_column_id) + '" referencedSchema="' + SCHEMA_NAME(f.schema_id) + '" referencedTable="' + OBJECT_NAME (f.referenced_object_id) + '" referencedColumn="' + COL_NAME(fc.referenced_object_id, fc.referenced_column_id) + '"/>'
+FROM sys.foreign_keys AS f
+INNER JOIN sys.foreign_key_columns AS fc
+   ON f.OBJECT_ID = fc.constraint_object_id
+
+	union
+
+    select 12, s.name, t.name, 0, 0, '</ForeignKeys>'
+    from
+        sys.tables t
+    inner JOIN
+        sys.schemas s on s.schema_id = t.schema_id
+
+	union
+
+    select 13, s.name, t.name, 0, 0, '<Indexes>'
     from
         sys.tables t
     inner JOIN
@@ -116,7 +140,7 @@ from
 
     union
 
-    select top 100 percent 10, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY t.name ORDER BY t.name)) * 10, 0, CONCAT('<Index name="', i.name, '">')
+    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY t.name ORDER BY t.name)) * 10, 0, CONCAT('<Index name="', i.name, '">')
     from
         sys.tables t
     inner join
@@ -130,7 +154,7 @@ from
 
     union
 
-    select top 100 percent 10, s.name, object_name(o.object_id), (ROW_NUMBER() OVER (PARTITION BY i.object_id ORDER BY i.object_id)) + (ROW_NUMBER() OVER (PARTITION BY object_name(o.object_id) ORDER BY object_name(o.object_id))) * 10, ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
+    select top 100 percent 14, s.name, object_name(o.object_id), (ROW_NUMBER() OVER (PARTITION BY i.object_id ORDER BY i.object_id)) + (ROW_NUMBER() OVER (PARTITION BY object_name(o.object_id) ORDER BY object_name(o.object_id))) * 10, ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
     from
         sys.indexes i 
     inner join 
@@ -150,7 +174,7 @@ from
 
     union
 
-    select top 100 percent 10, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY t.name ORDER BY t.name)) * 10 + 9, 0, '</Index>'
+    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY t.name ORDER BY t.name)) * 10 + 9, 0, '</Index>'
     from
         sys.tables t
     inner join
@@ -164,7 +188,7 @@ from
 
     union
 
-    select 13, s.name, t.name, 0, 0, '</Indexes>'
+    select 15, s.name, t.name, 0, 0, '</Indexes>'
     from
         sys.tables t
     inner JOIN
@@ -172,7 +196,7 @@ from
 
     union
 
-    select 14, s.name, t.name, 0, 0, '</Table>'
+    select 16, s.name, t.name, 0, 0, '</Table>'
     from
         sys.tables t
     inner JOIN
