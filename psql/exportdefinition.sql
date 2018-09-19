@@ -1,24 +1,24 @@
 select db.xcontent
 from
 (
-    select 0 sort, '' "schema", '' tbl, 0 col, '<?xml version="1.0"?>' xcontent
+    select 0 sort, '' "schema", '' tbl, 0 innerSort, 0 col, '<?xml version="1.0"?>' xcontent
     union
-    select 1, '', '', 0, CONCAT('<Database name="', current_database(), '">')
+    select 1, '', '', 0, 0, CONCAT('<Database name="', current_database(), '">')
     union
-    select 2, t.table_schema, t.table_name, 0, CONCAT('<Table schema="', t.table_schema, '" name="', t.table_name, '">')
+    select 2, t.table_schema, t.table_name, 0, 0, CONCAT('<Table schema="', t.table_schema, '" name="', t.table_name, '">')
     from
         information_schema.tables t
     where 
         t.table_type='BASE TABLE'  and t.table_schema not in ('pg_catalog', 'information_schema')
     union
-    select 3, t.table_schema, t.table_name, 0, '<Fields>'
+    select 3, t.table_schema, t.table_name, 0, 0, '<Fields>'
     from
         information_schema.tables t
     where 
         t.table_type='BASE TABLE'  and t.table_schema not in ('pg_catalog', 'information_schema')
     union
 
-    select 4, t.table_schema, t.table_name, c.ordinal_position, CONCAT('<Field name="', c.column_name, '" type="', 
+    select 4, t.table_schema, t.table_name, 0, c.ordinal_position, CONCAT('<Field name="', c.column_name, '" type="', 
         case
             when c.data_type='character varying' then CONCAT('varchar', '(', c.character_maximum_length, ')')
             when c.data_type='integer' then 'int'
@@ -36,7 +36,7 @@ from
 
     union
 
-    select 5, t.table_schema, t.table_name, 0, '</Fields>'
+    select 5, t.table_schema, t.table_name, 0, 0, '</Fields>'
     from
         information_schema.tables t
     where 
@@ -44,7 +44,7 @@ from
 
     union
 
-    select 6, t.table_schema, t.table_name, 0, '<PrimaryKey>'
+    select 6, t.table_schema, t.table_name, 0, 0, '<PrimaryKey>'
     from
         information_schema.tables t
     where 
@@ -52,7 +52,7 @@ from
 
     union
 
-    select 7, t.table_schema, t.table_name, kcu.ordinal_position, CONCAT('<Field name="', kcu.column_name, '" pos="', CAST(kcu.ordinal_position AS char(1)), '"/>')
+    select 7, t.table_schema, t.table_name, 0, kcu.ordinal_position, CONCAT('<Field name="', kcu.column_name, '" pos="', CAST(kcu.ordinal_position AS char(1)), '"/>')
     from
         information_schema.tables t 
     inner join
@@ -62,7 +62,7 @@ from
 
     union
 
-    select 8, t.table_schema, t.table_name, 0, '</PrimaryKey>'
+    select 8, t.table_schema, t.table_name, 0, 0, '</PrimaryKey>'
     from
         information_schema.tables t
     where 
@@ -70,7 +70,7 @@ from
 
     union
 
-    select 9, t.table_schema, t.table_name, 0, '<ForeignKeys>'
+    select 9, t.table_schema, t.table_name, 0, 0, '<ForeignKeys>'
     from
         information_schema.tables t
     where 
@@ -78,7 +78,7 @@ from
 
     union
 
-	select 10, tc.table_schema, tc.table_name, 0, CONCAT('<ForeignKey name="', tc.constraint_name, '" column="', kcu.column_name, '" referencedSchema="', ccu.table_schema, '" referencedTable="', ccu.table_name, '" referencedColumn="', ccu.column_name, '"/>')
+	select 10, tc.table_schema, tc.table_name, 0, 0, CONCAT('<ForeignKey name="', tc.constraint_name, '" column="', kcu.column_name, '" referencedSchema="', ccu.table_schema, '" referencedTable="', ccu.table_name, '" referencedColumn="', ccu.column_name, '"/>')
 	FROM 
 	    information_schema.table_constraints AS tc 
 	    JOIN information_schema.key_column_usage AS kcu
@@ -93,7 +93,7 @@ from
 	
     union
 
-    select 11, t.table_schema, t.table_name, 0, '</ForeignKeys>'
+    select 11, t.table_schema, t.table_name, 0, 0, '</ForeignKeys>'
     from
         information_schema.tables t
     where 
@@ -101,7 +101,7 @@ from
 
     union
 
-    select 12, t.table_schema, t.table_name, 0, '<Indexes>'
+    select 12, t.table_schema, t.table_name, 0, 0, '<Indexes>'
     from
         information_schema.tables t
     where 
@@ -109,7 +109,7 @@ from
 
     union
 
-    select 13, t.table_schema, t.table_name, i.indrelid, CONCAT('<Index name="', c2.relname, '">')
+    select 14, t.table_schema, t.table_name, (ROW_NUMBER() OVER (PARTITION BY t.table_name ORDER BY t.table_name)) * 10, i.indrelid, CONCAT('<Index name="', c2.relname, '">')
     from
         information_schema.tables t
 	inner join
@@ -124,7 +124,7 @@ from
 
     union
 
-    select 14, t.table_schema, t.table_name, i.indrelid, CONCAT('<Field name="', x.colname, '" pos="0"/>')
+    select 14, t.table_schema, t.table_name, (ROW_NUMBER() OVER (PARTITION BY c.oid::oid ORDER BY c.oid::oid)) + (ROW_NUMBER() OVER (PARTITION BY t.table_name ORDER BY t.table_name)) * 10, i.indrelid, CONCAT('<Field name="', x.colname, '" pos="0"/>')
 --		t.table_name, c.oid::oid oid, c2.relname, x.colname 
     from
         information_schema.tables t
@@ -164,7 +164,7 @@ from
 
     union
 
-    select 15, t.table_schema, t.table_name, i.indrelid, '</Index>'
+    select 14, t.table_schema, t.table_name, (ROW_NUMBER() OVER (PARTITION BY t.table_name ORDER BY t.table_name)) * 10 + 9, i.indrelid, '</Index>'
     from
         information_schema.tables t
 	inner join
@@ -179,7 +179,7 @@ from
 
     union
 
-    select 16, t.table_schema, t.table_name, 0, '</Indexes>'
+    select 15, t.table_schema, t.table_name, 0, 0, '</Indexes>'
     from
         information_schema.tables t
     where 
@@ -187,7 +187,7 @@ from
 
     union
 
-    select 17, t.table_schema, t.table_name, 0, CONCAT('</Table>')
+    select 16, t.table_schema, t.table_name, 0, 0, CONCAT('</Table>')
     from
         information_schema.tables t
     where 
@@ -195,7 +195,7 @@ from
 
     union
 
-    select 999, 'xxx', 'xxx', 0, '</Database>'
+    select 999, 'xxx', 'xxx', 0, 0, '</Database>'
 
 ) db
-order by db."schema", db.tbl, db.sort, db.col
+order by db."schema", db.tbl, db.sort, db.innerSort, db.col
