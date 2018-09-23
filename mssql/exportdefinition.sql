@@ -140,7 +140,7 @@ INNER JOIN sys.foreign_key_columns AS fc
 
     union
 
-    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY t.name ORDER BY t.name)) * 10, 0, CONCAT('<Index name="', i.name, '">')
+    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name,i.index_id)) * 10, 0, CONCAT('<Index name="', i.name, '" unique="' + IIF(i.is_unique=0, 'no', 'yes') + '">')
     from
         sys.tables t
     inner join
@@ -153,8 +153,7 @@ INNER JOIN sys.foreign_key_columns AS fc
 	order by t.name
 
     union
-
-    select top 100 percent 14, s.name, object_name(o.object_id), (ROW_NUMBER() OVER (PARTITION BY i.object_id ORDER BY i.object_id)) + (ROW_NUMBER() OVER (PARTITION BY object_name(o.object_id) ORDER BY object_name(o.object_id))) * 10, ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
+    select top 100 percent 14, s.name, t.name, (RANK() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name,i.index_id)) * 10 + (ROW_NUMBER() OVER (PARTITION BY s.name,t.name,i.index_id ORDER BY s.name,t.name,i.index_id,ic.key_ordinal)), ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
     from
         sys.indexes i 
     inner join 
@@ -166,15 +165,15 @@ INNER JOIN sys.foreign_key_columns AS fc
     inner join sys.tables t on t.object_id = o.object_id
     inner join sys.schemas s on s.schema_id = t.schema_id
     where i.[type] = 2 
-        and i.is_unique = 0 
+        -- and i.is_unique = 0 
         and i.is_primary_key = 0
         and o.[type] = 'U'
         --and ic.is_included_column = 0
-	order by object_name(o.object_id)
+	order by object_name(i.object_id)
 
     union
 
-    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY t.name ORDER BY t.name)) * 10 + 9, 0, '</Index>'
+    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name)) * 10 + 9, 0, '</Index>'
     from
         sys.tables t
     inner join

@@ -3,18 +3,18 @@
     <xsl:output method="text"/>
     <xsl:template match="/">
         <xsl:for-each select="//Table">
-            alter table <xsl:value-of select="@name"/> add primary key (
+            alter table [<xsl:value-of select="@schema"/>].[<xsl:value-of select="@name"/>] add primary key (
                 <xsl:for-each select="PrimaryKey/Field">
-                    <xsl:value-of select="@name"/><xsl:if test="position() != last()">,</xsl:if>
+                    [<xsl:value-of select="@name"/>]<xsl:if test="position() != last()">,</xsl:if>
                 </xsl:for-each>
             )
             go
         </xsl:for-each>
         <xsl:for-each select="//Table">
             <xsl:for-each select="./Indexes/Index">
-                create index <xsl:value-of select="@name"/> on <xsl:value-of select="../../@name"/>(
+                create <xsl:if test="@unique = 'yes'">unique</xsl:if> index <xsl:value-of select="@name"/> on [<xsl:value-of select="../../@schema"/>].[<xsl:value-of select="../../@name"/>](
                 <xsl:for-each select="./Field">
-                    <xsl:value-of select="@name"/><xsl:if test="position() != last()">,</xsl:if>
+                    [<xsl:value-of select="@name"/>]<xsl:if test="position() != last()">,</xsl:if>
                 </xsl:for-each>
                 )
                 go
