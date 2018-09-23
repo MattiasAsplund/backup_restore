@@ -140,7 +140,7 @@ INNER JOIN sys.foreign_key_columns AS fc
 
     union
 
-    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name,i.index_id)) * 10, 0, CONCAT('<Index name="', i.name, '" unique="' + IIF(i.is_unique=0, 'no', 'yes') + '">')
+    select top 100 percent 14, s.name, t.name, (ROW_NUMBER() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name,i.index_id)) * 10, 0, CONCAT('<Index name="', i.name, '" unique="' + IIF(i.is_unique=0, 'no', 'yes') + '" xml="' + IIF(i.[type]=3, 'yes', 'no') + '">')
     from
         sys.tables t
     inner join
@@ -153,23 +153,18 @@ INNER JOIN sys.foreign_key_columns AS fc
 	order by t.name
 
     union
-    select top 100 percent 14, s.name, t.name, (RANK() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name,i.index_id)) * 10 + (ROW_NUMBER() OVER (PARTITION BY s.name,t.name,i.index_id ORDER BY s.name,t.name,i.index_id,ic.key_ordinal)), ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '"/>')
+    select top 100 percent 14, s.name, t.name, (DENSE_RANK() OVER (PARTITION BY s.name,t.name ORDER BY s.name,t.name,i.name)) * 10 + (ROW_NUMBER() OVER (PARTITION BY s.name,t.name,i.name ORDER BY s.name,t.name,i.name,ic.key_ordinal)), ic.key_ordinal, CONCAT('<Field name="', co.[name], '" pos="', CAST(ic.key_ordinal AS char(1)), '" included="' +IIF(ic.is_included_column=1, 'yes', 'no') + '"/>')
     from
         sys.indexes i 
-    inner join 
-        sys.objects o on i.object_id = o.object_id
-    inner join sys.index_columns ic on ic.object_id = i.object_id 
-        and ic.index_id = i.index_id
-    inner join sys.columns co on co.object_id = i.object_id 
-        and co.column_id = ic.column_id
-    inner join sys.tables t on t.object_id = o.object_id
+    inner join sys.tables t 
+		on t.object_id = i.object_id
+    inner join sys.index_columns ic 
+		on ic.object_id = t.object_id and ic.index_id = i.index_id
+    inner join sys.columns co
+        on co.object_id = t.object_id and co.column_id = ic.column_id
     inner join sys.schemas s on s.schema_id = t.schema_id
-    where i.[type] = 2 
-        -- and i.is_unique = 0 
-        and i.is_primary_key = 0
-        and o.[type] = 'U'
-        --and ic.is_included_column = 0
-	order by object_name(i.object_id)
+    where i.[type] in (2, 3)
+	order by s.name, t.name, i.index_id
 
     union
 
