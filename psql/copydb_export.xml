@@ -7,5 +7,5 @@
 . ./removetrailingspaces.sh <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>_temp.xml <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml
             </xsl:if>
 xsltproc --stringparam tempFolder <xsl:value-of select="$tempFolder"/> --stringparam u <xsl:value-of select="$su"/> --stringparam p $'<xsl:value-of select="$sp"/>' psql/export.xslt <xsl:value-of select="$tempFolder"/><xsl:value-of select="$sD"/>.xml &gt; <xsl:value-of select="$tempFolder"/>export.sql
-&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -d <xsl:value-of select="$su"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
+&quot;<xsl:value-of select="//psql/@path"/>&quot; -a -b -U postgres -W -d <xsl:value-of select="$sD"/> &lt; <xsl:value-of select="$tempFolder"/>export.sql
         </xsl:if>
